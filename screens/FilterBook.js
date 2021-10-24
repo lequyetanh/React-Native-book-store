@@ -63,7 +63,7 @@ const FilterBook = ({route, navigation}) => {
     
     function renderMyBookSection(myBooks) {
 
-        console.log(myBooks)
+        // console.log(myBooks)
         const renderItem = ({ item, index }) => {
             return (
                     <TouchableOpacity

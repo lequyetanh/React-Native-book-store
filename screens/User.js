@@ -176,7 +176,7 @@ const User = ({navigation}) => {
                 />
 
                 <View style={styles.rightUser}>
-                    <Text>{auth.currentUser?.email}</Text>
+                    <Text style={{fontSize: 20, color: '#ffffff'}}>{auth.currentUser?.email}</Text>
                     <TouchableOpacity
                         onPress={handleSignOut}
                         style={styles.button}
@@ -200,7 +200,7 @@ const User = ({navigation}) => {
 export default User;
 const styles = StyleSheet.create({
     rightUser:{
-        width: "55%",
+        width: "65%",
     },
      button: {
       backgroundColor: '#0782F9',

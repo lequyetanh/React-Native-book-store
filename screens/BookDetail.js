@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -14,12 +14,16 @@ import {user} from './../data/user'
 import useForceUpdate from 'use-force-update';
 import { firebase } from './../firebase';
 import { auth } from './../firebase';
+import { diff } from "react-native-reanimated";
 
 const BookDetail = ({ route, navigation }) => {
 
-    const userColumn = firebase.database().ref('user');
-    let userItem;
+    let userItem = {
+        listBook: null
+    };
     let userList;
+    
+    const userColumn = firebase.database().ref('user');
     userColumn.on('value', (snapshot)=>{
         userItem = snapshot.val();
         userList = [];
@@ -31,10 +35,11 @@ const BookDetail = ({ route, navigation }) => {
             }
             // userList.push({id, ...userItem[id]});
         }
-        console.log(userList);
+        // console.log(userList);
     })
 
     const [book, setBook] = React.useState(null);
+    const [listBook, setListBook] = useState([])
     const forceUpdate = useForceUpdate();
 
     const [scrollViewWholeHeight, setScrollViewWholeHeight] = React.useState(1);
@@ -47,17 +52,22 @@ const BookDetail = ({ route, navigation }) => {
         setBook(book)
     }, [book])
 
+    // React.useEffect(() => {
+
+    // },)
+
+
     function renderBookInfoSection() {
         return (
-            <View style={{ flex: 1 }}>
-                <ImageBackground source={book.bookCover}
+            <View style={{ flex: 1, paddingHorizontal: 20, paddingVertical: 10 }}>
+                <ImageBackground source={{ uri: book.bookCover}}
                     resizeMode="cover"
                     style={{
                         position: 'absolute',
                         top: 0,
                         right: 0,
                         bottom: 0,
-                        left: 0
+                        left: 0,
                     }}
                 />
 
@@ -75,7 +85,7 @@ const BookDetail = ({ route, navigation }) => {
                 </View>
 
                 {/* Navigation header */}
-                <View style={{ flexDirection: 'row', paddingHorizontal: SIZES.radius, height: 40, alignItems: 'flex-end' }}>
+                <View style={{ flexDirection: 'row', height: 40, alignItems: 'flex-end' }}>
                     <TouchableOpacity
                         style={{ marginLeft: SIZES.base }}
                         onPress={() => navigation.goBack()}
@@ -112,7 +122,7 @@ const BookDetail = ({ route, navigation }) => {
                 </View>
 
                 {/* Book Cover */}
-                <View style={{ flex: 3, paddingTop: SIZES.padding2, alignItems: 'center' }}>
+                <View style={{ flex: 3, paddingTop: 10, alignItems: 'center' }}>
                     <Image
                         source={{uri: book.bookCover}}
                         resizeMode="contain"
@@ -136,8 +146,10 @@ const BookDetail = ({ route, navigation }) => {
     function renderBookDescription() {
 
         const indicatorSize = scrollViewWholeHeight > scrollViewVisibleHeight ? scrollViewVisibleHeight * scrollViewVisibleHeight / scrollViewWholeHeight : scrollViewVisibleHeight
+        console.log(indicatorSize);
 
         const difference = scrollViewVisibleHeight > indicatorSize ? scrollViewVisibleHeight - indicatorSize : 1
+        console.log(difference)
 
         return (
             <View style={{ flex: 1, flexDirection: 'row', padding: SIZES.padding }}>
@@ -162,7 +174,6 @@ const BookDetail = ({ route, navigation }) => {
                 {/* Description */}
                 <ScrollView
                     contentContainerStyle={{ paddingLeft: SIZES.padding2 }}
-                    showsVerticalScrollIndicator={false}
                     scrollEventThrottle={16}
                     onContentSizeChange={(width, height) => {
                         setScrollViewWholeHeight(height)
@@ -175,9 +186,18 @@ const BookDetail = ({ route, navigation }) => {
                         { useNativeDriver: false }
                     )}
                 >
-                    <Text style={{ ...FONTS.h2, color: COLORS.white, marginBottom: SIZES.padding }}>Description</Text>
+                    <View style={{ justifyContent: 'flex-start', alignItems: 'center', padding: SIZES.base, marginBottom: 10, backgroundColor: COLORS.darkGreen, height: 40, borderRadius: SIZES.radius }}>
+                        <Text style={{ ...FONTS.body3, color: COLORS.lightGreen }}>Thông Tin Truyện</Text>
+                    </View>
+                    <Text style={{ fontSize: 20, color: COLORS.white, marginBottom: 10}}>Điểm: {book.rating}</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.white, marginBottom: 10}}>Ngôn Ngữ: Tiếng Việt</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.white, marginBottom: 10}}>Số Trang: {book.pageNo} trang</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.white, marginBottom: 10}}>Thể Loại: {book.genre}</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.white, marginBottom: 10}}>Lượt Xem: {book.view}</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.white, marginBottom: 10}}>Ngày Phát Hành: {book.date}</Text>
                     <ScrollView style={{ ...FONTS.body2, color: "#FFFFFF" }}>
-                        {renderDescription(book.description)}
+                    <Text style={{  ...FONTS.h2, color: COLORS.white, marginBottom: 10}}>Tóm tắt: </Text>
+                         {renderDescription(book.description)}
                     </ScrollView>
                 </ScrollView>
             </View>
@@ -199,13 +219,23 @@ const BookDetail = ({ route, navigation }) => {
         // console.log(book)
         // user.push(book)
         const userColumn = firebase.database().ref('user').child(userList.id);
-        const listId = [...userItem.listBook, book.id]
+        const listId = [...userItem.listBook]
+
+        if(listId.indexOf(book.id) != -1){
+            listId.splice(listId.indexOf(book.id), 1)
+            alert("Remove Successfully")
+        }else{
+            listId.push(book.id)
+            alert("Add Successfully")
+        }
+
+        // const listId = [...listId, book.id]
+        setListBook(listId)
         userColumn.update({
             ...userItem,
             listBook: listId,
         })
         // forceUpdate();
-        alert("Add Successfully")
         // console.log(user)
     }
 
@@ -214,28 +244,53 @@ const BookDetail = ({ route, navigation }) => {
         return (
             <View style={{ flex: 1, flexDirection: 'row' }}>
                 {/* Bookmark */}
-                <TouchableOpacity
-                    style={{
-                        width: 60,
-                        backgroundColor: COLORS.secondary,
-                        marginLeft: SIZES.padding,
-                        marginVertical: SIZES.base,
-                        borderRadius: SIZES.radius,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                    onPress={() => addBookToUser(book)}
-                >
-                    <Image
-                        source={icons.bookmark_icon}
-                        resizeMode="contain"
-                        style={{
-                            width: 25,
-                            height: 25,
-                            tintColor: COLORS.lightGray2
-                        }}
-                    />
-                </TouchableOpacity>
+               {
+                   userItem['listBook'].indexOf(book.id) != -1 ?  <TouchableOpacity
+                   style={{
+                       width: 60,
+                       backgroundColor: '#FFCC33',
+                       marginLeft: SIZES.padding,
+                       marginVertical: SIZES.base,
+                       borderRadius: SIZES.radius,
+                       alignItems: 'center',
+                       justifyContent: 'center',
+                   }}
+                   onPress={() => addBookToUser(book)}
+               >
+                   <Image
+                       source={icons.bookmark_icon}
+                       resizeMode="contain"
+                       style={{
+                           width: 25,
+                           height: 25,
+                           tintColor: '#FFFFFF',
+                       }}
+                   />
+               </TouchableOpacity>:
+               <TouchableOpacity
+               style={{
+                   width: 60,
+                   backgroundColor: COLORS.secondary,
+                   marginLeft: SIZES.padding,
+                   marginVertical: SIZES.base,
+                   borderRadius: SIZES.radius,
+                   alignItems: 'center',
+                   justifyContent: 'center',
+               }}
+               onPress={() => addBookToUser(book)}
+           >
+               <Image
+                   source={icons.bookmark_icon}
+                   resizeMode="contain"
+                   style={{
+                       width: 25,
+                       height: 25,
+                       fontWeight: 'bold',
+                       tintColor: '#FFFFFF'
+                   }}
+               />
+           </TouchableOpacity>
+               }
 
                 {/* Start Reading */}
                 <TouchableOpacity

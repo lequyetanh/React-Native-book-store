@@ -9,6 +9,7 @@ import { User } from "../screens/";
 import { icons, COLORS } from "../constants";
 import { Search } from '../screens';
 import { Login } from '../screens'
+import IconAntDesign from 'react-native-vector-icons/AntDesign'
 
 const Tab = createBottomTabNavigator();
 

@@ -6,7 +6,8 @@ import Genre from './Genre';
 import User from './User';
 import FilterBook from "./FilterBook";
 import Search from "./Search";
-import Login from './Login'
+import Login from './Login';
+// import StandardBook from "./StandardBook";
 
 export {
     Home,
@@ -17,5 +18,6 @@ export {
     User,
     FilterBook,
     Search,
-    Login
+    Login,
+    // StandardBook
 };
