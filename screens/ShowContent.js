@@ -10,14 +10,33 @@ import {
     FlatList
 } from 'react-native';
 import { FONTS, COLORS, SIZES, icons } from "../constants";
-import { content } from '../data/content';
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 
 const ShowContent = ({ route, navigation }) => {
 
     const [book, setBook] = React.useState(null);
-    let data  = content[0].content;
+    const [genre, setGenre] = React.useState(null);
+    const [content, setContent] = React.useState(false)
+    // let data  = content[0].content;
     // console.log(data)
+
+    React.useEffect(() => {
+        let  genre = route.params.genre;
+        let book  = route.params.book;
+        setBook(book)
+        setGenre(genre)
+        // console.log(book)
+
+        // console.log(book)
+        // console.log(genre)
+
+        for(let i=0;i<book.content.length; i++){
+            if(book.content[i].chapter == genre){
+                setContent(book.content[i].content)
+                // console.log(content)
+            }
+        }
+    }, [book, genre])
 
     const [scrollViewWholeHeight, setScrollViewWholeHeight] = React.useState(1);
     const [scrollViewVisibleHeight, setScrollViewVisibleHeight] = React.useState(0);
@@ -36,19 +55,22 @@ const ShowContent = ({ route, navigation }) => {
       )
     };
 
-    if (!book) {
+    if (content) {
         return (
             <View style={{backgroundColor: COLORS.black,  padding: 20  }}>
 
                 <TouchableOpacity
-                    style={{ }}
+                    style={{ position: "relative", zIndex: 1 }}
                     onPress={() => navigation.goBack()}
                 >
                     <IconAntDesign name="arrowleft" size={30} color="#fff" />
                 </TouchableOpacity>
+                <View style={{ paddingHorizontal: SIZES.padding, textAlign: 'center', marginTop: -30, marginBottom: 20}}>
+                    <Text style={{ ...FONTS.h2, color: COLORS.white, textTransform: "capitalize" }}>Nội Dung Truyện</Text>
+                </View>
                 <ScrollView style={{ ...FONTS.body2, color: "#EEEEEE",}}>
                     {
-                        renderContent(data)
+                        renderContent(content)
                     }
                         {/* <Text>{}</Text> */}
                 </ScrollView>

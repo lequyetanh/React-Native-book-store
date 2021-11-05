@@ -27,17 +27,23 @@ import {
 // import StandardBook from "./StandardBook";
 
 const Home = ({route, navigation }) => {
-
-
    
     function renderHeader() {
         return (
-            <View style={{ flex: 1, flexDirection: 'row', marginLeft: 25, alignItems: 'center', marginTop: 20 }}>
+            <View style={{ flex: 1, flexDirection: 'row', marginLeft: 25,marginRight: 25, alignItems: 'center', marginTop: 20, justifyContent: 'space-between' }}>
                 {/* Greetings */}
                     <View style={{ marginRight: SIZES.padding }}>
                         <Text style={{ ...FONTS.h3, color: COLORS.white }}>Welcome</Text>
                         <Text style={{ ...FONTS.h2, color: COLORS.white, marginLeft: -5 }}> {auth.currentUser?.email}</Text>
                     </View>
+                    <Image
+                        // source={{uri: icons.appIcon}}
+                        source = {{uri: "https://image.flaticon.com/icons/png/512/1457/1457793.png"}}
+                        style={{
+                            width: 50,
+                            height: 50,
+                        }}
+                    />
             </View>
         )
     }
@@ -75,14 +81,14 @@ const Home = ({route, navigation }) => {
                         {/* Book Info */}
                         <View style={{ marginTop: SIZES.radius, flexDirection: 'row', alignItems: 'center' }}>
                             <Image
-                                source={icons.clock_icon}
+                                source={icons.bookmark_icon}
                                 style={{
                                     width: 20,
                                     height: 20,
                                     tintColor: COLORS.lightGray
                                 }}
                             />
-                            <Text style={{ marginLeft: 5, ...FONTS.body3, color: COLORS.lightGray }}>10d 5h</Text>
+                            <Text style={{ marginLeft: 5, ...FONTS.body3, color: COLORS.lightGray }}>{item.rating}</Text>
 
                             <Image
                                 source={icons.page_icon}
@@ -93,7 +99,7 @@ const Home = ({route, navigation }) => {
                                     tintColor: COLORS.lightGray
                                 }}
                             />
-                            <Text style={{ marginLeft: 5, ...FONTS.body3, color: COLORS.lightGray }}>{item.readed} %</Text>
+                            <Text style={{ marginLeft: 5, ...FONTS.body3, color: COLORS.lightGray }}>{item.pageNo}</Text>
                         </View>
                     </TouchableOpacity>
             )

@@ -70,7 +70,7 @@ const FilterBook = ({route, navigation}) => {
                         style={{
                             width: '50%',
                             height: 300,
-                            padding:10,
+                            padding:5,
                         }}
                         onPress={() => navigation.navigate("BookDetail", {
                             book: item
@@ -116,10 +116,6 @@ const FilterBook = ({route, navigation}) => {
 
         return (
             <View style={{ flex: 1 }}>
-                {/* Header */}
-                <View style={{ paddingHorizontal: SIZES.padding, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ ...FONTS.h2, color: COLORS.white, textTransform: "capitalize" }}>{genre}</Text>
-                </View>
 
                 {/* Books */}
                 <View style={{ flex: 1, marginTop: SIZES.padding}}>
@@ -139,11 +135,15 @@ const FilterBook = ({route, navigation}) => {
         return (
             <View style={{ flex: 1, backgroundColor: COLORS.black,  padding: 20   }}>
                 <TouchableOpacity
-                    style={{ }}
+                    style={{ position: "relative", zIndex: 1 }}
                     onPress={() => navigation.goBack()}
                 >
                     <IconAntDesign name="arrowleft" size={30} color="#fff" />
                 </TouchableOpacity>
+                {/* Header */}
+                <View style={{ paddingHorizontal: SIZES.padding, textAlign: 'center', marginTop: -30}}>
+                    <Text style={{ ...FONTS.h2, color: COLORS.white, textTransform: "capitalize" }}>Thể Loại Truyện: {genre}</Text>
+                </View>
                 <ScrollView style={{ marginTop: SIZES.radius }}>
                     {/* Books Section */}
                     <View>

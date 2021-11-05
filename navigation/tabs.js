@@ -73,7 +73,7 @@ const Tabs = () => {
                         case "Account":
                             return (
                                 <Image
-                                    source={icons.bookmark_icon}
+                                    source={icons.clock_icon}
                                     resizeMode="contain"
                                     style={{
                                         tintColor: tintColor,

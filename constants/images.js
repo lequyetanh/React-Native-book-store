@@ -7,5 +7,5 @@ export default {
     otherWordsForHome,
     theMetropolist,
     theTinyDragon,
-    underland
+    underland,
 }

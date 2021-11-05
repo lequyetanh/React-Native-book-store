@@ -10,15 +10,7 @@ import {
     FlatList
 } from 'react-native';
 import { FONTS, COLORS, SIZES, icons } from "../constants";
-import { content } from '../data/content';
-
-const LineDivider = () => {
-    return (
-        <View style={{ width: 1, paddingVertical: 5 }}>
-            <View style={{ flex: 1, borderLeftColor: COLORS.lightGray2, borderLeftWidth: 1 }}></View>
-        </View>
-    )
-}
+import IconAntDesign from 'react-native-vector-icons/AntDesign'
 
 const ShowChapter = ({ route, navigation }) => {
 
@@ -32,32 +24,46 @@ const ShowChapter = ({ route, navigation }) => {
     React.useEffect(() => {
         let { book } = route.params;
         setBook(book)
+        // console.log(book)
     }, [book])
 
-    const renderContent = (content) => {
+    const renderContent = (chapter) => {
         // console.log(content)
         return (
-            <TouchableOpacity 
-                style={{ backgroundColor: "#FF6600", margin: 5, padding: 5, borderRadius: 5, color: "#EEEEEE"}} 
-                onPress={() => navigation.navigate("ShowContent", {
-                    content: content.item.content
-                })}  
-            ><Text>{content.item.Chapter}</Text></TouchableOpacity>
-      )
+            chapter.map((data, index) => {
+
+                return (
+                    <TouchableOpacity 
+                        key={index}
+                        style={{ backgroundColor: "#FF6600", margin: 7, padding: 15, borderRadius: 15, cursor: 'pointer', width:'95%'}} 
+                        onPress={() => navigation.navigate("ShowContent", {genre: data, book: book})}  
+                    >
+                        <Text style={{cursor: 'pointer', fontSize: 14, color: COLORS.white}}>{data}</Text>
+                    </TouchableOpacity>
+                )
+            })
+        )
     };
 
     if (book) {
         return (
-            <View style={{ backgroundColor: COLORS.black }}>
+            <View style={{ flex: 1, backgroundColor: COLORS.black, padding: 15}}>
                  
-                  {/* <Text style={{ ...FONTS.body2, color: COLORS.lightGray, padding: 10 }}>
-                    <FlatList
-                            data={content}
-                            renderItem={renderContent}
-                            style={{width:"100%"}}
-                            numColumns={1}
-                        />
-                    </Text> */}
+                 <TouchableOpacity
+                   style={{ position: "relative", zIndex: 1 }}
+                    onPress={() => navigation.goBack()}
+                >
+                    <IconAntDesign name="arrowleft" size={30} color="#fff" />
+                </TouchableOpacity>
+                <View style={{ paddingHorizontal: SIZES.padding, textAlign: 'center', marginTop: -30}}>
+                    <Text style={{ ...FONTS.h2, color: COLORS.white, textTransform: "capitalize" }}>Danh Sách Chapter</Text>
+                </View>
+                    <ScrollView style={{ fontSize: 13, color: "#EEEEEE",cursor: 'pointer', marginTop: 10}}>
+                        {
+                            renderContent(book.chapter)
+                        }
+                            {/* <Text>{}</Text> */}
+                    </ScrollView>
             </View>
         )
     } else {

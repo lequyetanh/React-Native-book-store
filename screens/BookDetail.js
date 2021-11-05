@@ -17,30 +17,10 @@ import { auth } from './../firebase';
 import { diff } from "react-native-reanimated";
 
 const BookDetail = ({ route, navigation }) => {
-
-    let userItem = {
-        listBook: null
-    };
-    let userList;
-    
-    const userColumn = firebase.database().ref('user');
-    userColumn.on('value', (snapshot)=>{
-        userItem = snapshot.val();
-        userList = [];
-        for(let id in userItem){
-            if(userItem[id].user == auth.currentUser?.email){
-                userList = {id, ...userItem[id]};
-                userItem = {...userItem[id]};
-                break;
-            }
-            // userList.push({id, ...userItem[id]});
-        }
-        // console.log(userList);
-    })
-
     const [book, setBook] = React.useState(null);
+    const [userInfor, setUserInfor] = useState(null)
+    const [userList, setUserList] = useState(null)
     const [listBook, setListBook] = useState([])
-    const forceUpdate = useForceUpdate();
 
     const [scrollViewWholeHeight, setScrollViewWholeHeight] = React.useState(1);
     const [scrollViewVisibleHeight, setScrollViewVisibleHeight] = React.useState(0);
@@ -50,14 +30,33 @@ const BookDetail = ({ route, navigation }) => {
     React.useEffect(() => {
         let { book } = route.params;
         setBook(book)
-    }, [book])
+    }, [])
 
-    // React.useEffect(() => {
+    React.useEffect(() => {
+        let userItem = {
+            listBook: null
+        };
+        let userList;
+        
+        const userColumn = firebase.database().ref('user');
+        userColumn.on('value', (snapshot)=>{
+            userItem = snapshot.val();
+            userList = [];
+            for(let id in userItem){
+                if(userItem[id].user == auth.currentUser?.email){
+                    userList = {id, ...userItem[id]};
+                    userItem = {...userItem[id]};
+                    setUserInfor(userItem)
+                    setUserList(userList)
+                    break;
+                }
+                // userList.push({id, ...userItem[id]});
+            }
+            // console.log(userList);
+        })
+    }, [])
 
-    // },)
-
-
-    function renderBookInfoSection() {
+    const renderBookInfoSection = () => {
         return (
             <View style={{ flex: 1, paddingHorizontal: 20, paddingVertical: 10 }}>
                 <ImageBackground source={{ uri: book.bookCover}}
@@ -143,13 +142,13 @@ const BookDetail = ({ route, navigation }) => {
         )
     }
 
-    function renderBookDescription() {
+    const renderBookDescription = () => {
 
         const indicatorSize = scrollViewWholeHeight > scrollViewVisibleHeight ? scrollViewVisibleHeight * scrollViewVisibleHeight / scrollViewWholeHeight : scrollViewVisibleHeight
-        console.log(indicatorSize);
+        // console.log(indicatorSize);
 
         const difference = scrollViewVisibleHeight > indicatorSize ? scrollViewVisibleHeight - indicatorSize : 1
-        console.log(difference)
+        // console.log(difference)
 
         return (
             <View style={{ flex: 1, flexDirection: 'row', padding: SIZES.padding }}>
@@ -219,7 +218,7 @@ const BookDetail = ({ route, navigation }) => {
         // console.log(book)
         // user.push(book)
         const userColumn = firebase.database().ref('user').child(userList.id);
-        const listId = [...userItem.listBook]
+        const listId = [...userInfor.listBook]
 
         if(listId.indexOf(book.id) != -1){
             listId.splice(listId.indexOf(book.id), 1)
@@ -232,20 +231,19 @@ const BookDetail = ({ route, navigation }) => {
         // const listId = [...listId, book.id]
         setListBook(listId)
         userColumn.update({
-            ...userItem,
+            ...userInfor,
             listBook: listId,
         })
         // forceUpdate();
         // console.log(user)
     }
 
-    function renderBottomButton(book) {
-
+    const  renderBottomButton = (book) => {
         return (
             <View style={{ flex: 1, flexDirection: 'row' }}>
                 {/* Bookmark */}
                {
-                   userItem['listBook'].indexOf(book.id) != -1 ?  <TouchableOpacity
+                   userInfor['listBook'].indexOf(book.id) != -1 ?  <TouchableOpacity
                    style={{
                        width: 60,
                        backgroundColor: '#FFCC33',
@@ -303,7 +301,7 @@ const BookDetail = ({ route, navigation }) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => navigation.navigate("ShowContent", {
+                    onPress={() => navigation.navigate("ShowChapter", {
                         book: book
                     })}
                 >
@@ -313,22 +311,24 @@ const BookDetail = ({ route, navigation }) => {
         )
     }
 
-    if (book) {
+    if (book && userInfor) {
+        console.log(userInfor)
         return (
             <View style={{ flex: 1, backgroundColor: COLORS.black }}>
                 {/* Book Cover Section */}
                 <View style={{ flex: 1.5 }}>
-                    {renderBookInfoSection()}
+                {renderBookInfoSection()}
                 </View>
 
                 {/* Description */}
                 <View style={{ flex: 2 }}>
-                    {renderBookDescription()}
+                {renderBookDescription()}
                 </View>
 
                 {/* Buttons */}
                 <View style={{ height: 70, marginBottom: 30 }}>
-                    {renderBottomButton(book)}
+                {/* { userItem.listBook && renderBottomButton(book)} */}
+                { renderBottomButton(book)}
                 </View>
             </View>
         )

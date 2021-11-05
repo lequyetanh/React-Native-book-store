@@ -21,8 +21,8 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 const Search = ({navigation}) => {
 
 
-    const [search, setSearch] = useState('')
-    const [bookSearch, setBookSearch] = useState([])
+    const [search, setSearch] = useState()
+    const [bookSearch, setBookSearch] = useState(trinh_tham)
     // // console.log(data)
 
     // setBookSearch(trinh_tham);
@@ -36,7 +36,7 @@ const Search = ({navigation}) => {
                         style={{
                             width: '50%',
                             height: 300,
-                            padding:10,
+                            padding:5,
                         }}
                         onPress={() => navigation.navigate("BookDetail", {
                             book: item
