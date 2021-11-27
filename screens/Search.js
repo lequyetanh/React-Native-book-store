@@ -29,7 +29,7 @@ const Search = ({navigation}) => {
 
     function renderMyBookSection(myBooks) {
 
-        console.log(myBooks)
+        // console.log(myBooks)
         const renderItem = ({ item, index }) => {
             return (
                     <TouchableOpacity
@@ -113,7 +113,7 @@ const Search = ({navigation}) => {
                 item.push(data[i])
             }
         }
-        console.log(item);
+        // console.log(item);
         setBookSearch(item);
     }
 

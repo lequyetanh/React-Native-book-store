@@ -312,7 +312,7 @@ const BookDetail = ({ route, navigation }) => {
     }
 
     if (book && userInfor) {
-        console.log(userInfor)
+        // console.log(userInfor)
         return (
             <View style={{ flex: 1, backgroundColor: COLORS.black }}>
                 {/* Book Cover Section */}

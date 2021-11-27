@@ -28,7 +28,7 @@ const ShowChapter = ({ route, navigation }) => {
     }, [book])
 
     const renderContent = (chapter) => {
-        // console.log(content)
+        // console.log(chapter)
         return (
             chapter.map((data, index) => {
 
