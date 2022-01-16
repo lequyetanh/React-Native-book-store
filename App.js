@@ -37,9 +37,10 @@ const App = () => {
                 screenOptions={{
                     headerShown: false
                 }}
-                initialRouteName={'Home'}
+                initialRouteName={'Login'}
             >
                 {/* Tabs */}
+                <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Home" component={Tabs} />
                 {/* Screens */}
                 <Stack.Screen name="BookDetail" component={BookDetail} options={{ headerShown: false }} />

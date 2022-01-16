@@ -34,7 +34,7 @@ const Home = ({route, navigation }) => {
                 {/* Greetings */}
                     <View style={{ marginRight: SIZES.padding }}>
                         <Text style={{ ...FONTS.h3, color: COLORS.white }}>Welcome</Text>
-                        <Text style={{ ...FONTS.h2, color: COLORS.white, marginLeft: -5 }}> lequyetanh@gmail.com</Text>
+                        <Text style={{ ...FONTS.h2, color: COLORS.white, marginLeft: -5 }}> {auth.currentUser?.email}</Text>
                     </View>
                     <Image
                         // source={{uri: icons.appIcon}}
@@ -112,7 +112,7 @@ const Home = ({route, navigation }) => {
                     <Text style={{ ...FONTS.h2, color: COLORS.white, textTransform: "capitalize" }}>{myBooks[0].genre}</Text>
 
                     <TouchableOpacity
-                        onPress={() => {}}  
+                        onPress={() => navigation.navigate("FilterBook", myBooks[0].genre)}  
                     >
                         <Text style={{ ...FONTS.body3, color: COLORS.lightGray, alignSelf: 'flex-start', textDecorationLine: 'underline' }}>see more</Text>
                     </TouchableOpacity>
@@ -160,6 +160,6 @@ const Home = ({route, navigation }) => {
             </ScrollView>
         </View>
     )
-};
+}
 
 export default Home;

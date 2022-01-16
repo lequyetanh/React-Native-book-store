@@ -92,15 +92,15 @@ const Tabs = () => {
             />
              <Tab.Screen
                 name="Search"
-                component={Home}
+                component={Search}
             />
             <Tab.Screen
                 name="Genre"
-                component={Home}
+                component={Genre}
             />
             <Tab.Screen
                 name="Account"
-                component={Home}
+                component={User}
             />
         </Tab.Navigator>
     )
